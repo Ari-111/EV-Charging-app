@@ -1,7 +1,7 @@
 # ⚡ EV Charging Station Locator App
 
 <p align="center">
-  <img src="assets/images/image1.png" alt="App Preview" width="55%" />
+  <img src="assets/images/image1.jpg" alt="App Preview" width="55%" />
 </p>
 
 Welcome to the **EV Charging Station Locator App** 🚗🔋  
