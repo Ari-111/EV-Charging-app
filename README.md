@@ -1,69 +1,67 @@
-# EV Charging Station Locator App
+# ⚡ EV Charging Station Locator App
 
-Welcome to the **EV Charging Station Locator App** repository! This app is designed to help users find nearby EV charging stations based on their current location.
+<p align="center">
+  <img src="assets/images/image1.jpg" alt="App Preview 1" width="30%" />
+  <img src="assets/images/image2.jpg" alt="App Preview 2" width="30%" />
+  <img src="assets/images/image3.jpg" alt="App Preview 3" width="30%" />
+</p>
 
+🚗🔋 **EV Charging Station Locator App** helps users easily discover nearby EV charging stations, check availability, and navigate seamlessly.  
+Built for a **sustainable future**, this app enables EV owners to find charging points in real time and plan their journeys efficiently.  
 
-<img src="https://github.com/user-attachments/assets/190d4c57-94ce-4064-bee8-e12807b8cd30" width="50%" />
+---
+
+## 🌍 Problem Statement
+
+With the rise of **electric vehicles**, the lack of real-time information about charging stations (availability, connectors, speed, and cost) creates **range anxiety** for EV owners.  
+
+---
+
+## 💡 Our Solution
+
+The **EV Charging Station Locator App** solves this problem by:  
+- Providing **live nearby station discovery**  
+- Showing **availability, wait time, and charging cost**  
+- Offering **navigation support via Google Maps**  
+- Allowing users to **search and filter** charging stations  
+
+---
 
 ## 🚀 Features
 
-- **Station Locator:** Find nearby EV charging stations using the Google Place API.
-- **User Authentication:** Secure sign-in and sign-up via Clerk.
-- **Search Functionality:** Search for specific EV charging stations with Google Place Autocomplete.
-- **Location Marker:** View your current location on the map.
-- **Navigate to Station:** Get directions to a selected charging station via Google Maps.
+- 🔍 **Station Locator:** Find EV charging stations using **Google Place API**  
+- 👤 **Authentication:** Secure sign-in/sign-up powered by **Clerk**  
+- 🗺️ **Search Functionality:** Search with Google Place Autocomplete  
+- 📍 **Location Marker:** Track your current location in real-time  
+- ⚡ **Station Details:** Availability, wait time, pricing, amenities & connectors  
+- 🧭 **Navigation:** Direct route guidance with Google Maps  
 
-## 🛠️ Technologies Used
+---
 
-- **[React Native](https://reactnative.dev/):** Framework for building native mobile apps using React.
-- **[Expo](https://expo.dev/):** Tools and services for building, deploying, and quickly iterating on native Android, iOS, and web apps.
-- **[Google Place API](https://developers.google.com/places/web-service/overview):** API for retrieving information about places.
-- **[Clerk](https://clerk.dev/):** Authentication and user management service.
-- **[Firebase](https://firebase.google.com/):** Backend services for database.
+## 🛠️ Tech Stack
 
-## 📱 How to Use
+<p align="left">
+  <img src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white" />
+  <img src="https://img.shields.io/badge/Firebase-ffca28?style=for-the-badge&logo=firebase&logoColor=black" />
+  <img src="https://img.shields.io/badge/Clerk-3A0CA3?style=for-the-badge&logo=clerk&logoColor=white" />
+  <img src="https://img.shields.io/badge/Google%20Places%20API-4285F4?style=for-the-badge&logo=google&logoColor=white" />
+</p>
 
-1. **Login/Sign Up:** Start by logging in or signing up via Clerk.
-2. **Locate Stations:** The app automatically displays nearby EV charging stations.
-3. **Search:** Use the search bar to find specific stations.
-4. **Navigate:** Tap on a station to open directions in Google Maps.
+---
 
-## 📋 Setup Instructions
+## 📱 App Flow
 
-1. **Clone the repository:**
+1. **Login / Sign Up** → Authenticate with Clerk  
+2. **Locate Stations** → Auto-detect nearby charging stations  
+3. **Check Details** → Availability, cost, speed, connectors & wait time  
+4. **Navigate** → Open Google Maps for directions  
 
-    ```bash
-    git clone https://github.com/Ari-111/EV-Charging-app.git
-    ```
+---
 
-2. **Navigate to the project directory:**
+## ⚙️ Setup Instructions
 
-    ```bash
-    cd ev-charging-app
-    ```
+1. **Clone the repository**  
 
-3. **Install dependencies:**
-
-    ```bash
-    npm install
-    ```
-
-4. **Start the app:**
-
-    ```bash
-    expo start
-    ```
-
-## 📸 Screenshots
-
-<div style="display: flex; justify-content: space-between;">
-    <img src="https://github.com/user-attachments/assets/1308c96b-b405-4592-8a35-f85f5d43f9bf" alt="Home Screen" width="30%" />
-    <img src="https://github.com/user-attachments/assets/b3d658e0-6697-4150-94a3-619dccdd3914" alt="Favorite Screen" width="30%" />
-    <img src="https://github.com/user-attachments/assets/c0e62d78-e028-46c3-84c6-8446cab2e7bd" alt="navigation" width="30%" />
-</div>
-
-
-
-
-
-
+   ```bash
+   git clone https://github.com/Ari-111/EV-Charging-app.git
