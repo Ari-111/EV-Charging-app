@@ -1,5 +1,4 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../Screen/HomeScreen/HomeScreen';
 import { Ionicons } from '@expo/vector-icons';
@@ -36,13 +35,13 @@ export default function TabNavigation() {
             )
          }}
         />
-        <Tab.Screen name='profile'
+        <Tab.Screen name='vehicle'
          component={ProfileScreen}
          options={{
-            tabBarLabel: 'Profile',
+            tabBarLabel: 'My Vehicle',
             tabBarActiveTintColor: Colors.PRIMARY,
             tabBarIcon:  ({color, size}) => (
-                <FontAwesome name="user-circle" size={size} color={color} />
+                <Ionicons name="car-sport" size={size} color={color} />
             )
          }}
         />
