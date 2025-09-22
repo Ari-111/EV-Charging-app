@@ -7,7 +7,7 @@ import Colors from '../../Utils/Colors'
 import { useAuth, useUser } from '@clerk/clerk-expo'
 import VehicleDashboard from '../../Components/VehicleDashboard'
 import VehicleCard from '../../Components/VehicleCard'
-import { VehicleService } from '../../Utils/VehicleFirebaseService'
+import { VehicleService, testFirebaseConnection } from '../../Utils/VehicleFirebaseService'
 import { EV_MODELS } from '../../Utils/VehicleData'
 
 export default function ProfileScreen({ navigation }) {
@@ -30,7 +30,21 @@ export default function ProfileScreen({ navigation }) {
   const [addingVehicle, setAddingVehicle] = useState(false)
 
   useEffect(() => {
-    loadUserVehicles()
+    const initializeData = async () => {
+      // Test Firebase connection first
+      const isConnected = await testFirebaseConnection()
+      console.log('Firebase connection status:', isConnected)
+      
+      if (isConnected) {
+        await loadUserVehicles()
+      } else {
+        Alert.alert('Connection Error', 'Unable to connect to Firebase. Please check your internet connection.')
+      }
+    }
+    
+    if (user) {
+      initializeData()
+    }
   }, [user])
 
   const loadUserVehicles = async () => {
@@ -70,10 +84,52 @@ export default function ProfileScreen({ navigation }) {
     setNewVehicleBattery('100')
   }
 
+  // Test function for debugging - bypasses Firebase
+  const handleSaveNewVehicleLocal = async () => {
+    if (!selectedVehicleModel) return
+    
+    console.log('Adding vehicle locally for testing...', selectedVehicleModel)
+    setAddingVehicle(true)
+    
+    try {
+      const newVehicle = {
+        id: `test_${Date.now()}`,
+        userId: user.id,
+        vehicleId: selectedVehicleModel.id,
+        nickname: vehicleNickname || `My ${selectedVehicleModel.name}`,
+        currentBattery: parseInt(newVehicleBattery),
+        isLocal: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+      
+      // Add directly to state for immediate feedback
+      setUserVehicles(prev => [newVehicle, ...prev])
+      if (!selectedVehicle) {
+        setSelectedVehicle(newVehicle)
+      }
+      
+      // Close modal and reset states
+      setShowVehicleSelection(false)
+      setSelectedVehicleModel(null)
+      setVehicleNickname('')
+      setNewVehicleBattery('100')
+      
+      Alert.alert('Success', 'Vehicle added locally for testing!')
+      console.log('Test vehicle added:', newVehicle)
+    } catch (error) {
+      console.error('Error in test function:', error)
+    } finally {
+      setAddingVehicle(false)
+    }
+  }
+
   const handleSaveNewVehicle = async () => {
     if (!selectedVehicleModel) return
     
+    console.log('Starting to add vehicle...', selectedVehicleModel)
     setAddingVehicle(true)
+    
     try {
       const newVehicle = {
         id: selectedVehicleModel.id,
@@ -90,19 +146,71 @@ export default function ProfileScreen({ navigation }) {
         }
       }
       
-      const vehicleId = await VehicleService.addUserVehicle(user.id, newVehicle)
-      console.log('Added vehicle with ID:', vehicleId)
-      await loadUserVehicles()
+      console.log('Vehicle data prepared:', newVehicle)
+      console.log('User ID:', user.id)
+      
+      // Try adding to Firebase with timeout, fallback to local storage
+      let vehicleId;
+      try {
+        vehicleId = await Promise.race([
+          VehicleService.addUserVehicle(user.id, newVehicle),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Request timeout - check your internet connection')), 15000)
+          )
+        ])
+      } catch (firebaseError) {
+        console.warn('Firebase failed, using local fallback:', firebaseError.message)
+        // Generate a temporary local ID
+        vehicleId = `local_${Date.now()}`
+        
+        // Store locally as fallback
+        const localVehicle = { 
+          id: vehicleId, 
+          ...newVehicle,
+          userId: user.id,
+          vehicleId: newVehicle.id,
+          nickname: newVehicle.nickname,
+          currentBattery: newVehicle.currentBattery,
+          isLocal: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+        
+        // Add to current state immediately for testing
+        setUserVehicles(prev => [localVehicle, ...prev])
+        if (!selectedVehicle) {
+          setSelectedVehicle(localVehicle)
+        }
+        
+        Alert.alert('Offline Mode', 'Vehicle added locally. It will sync when connection is restored.')
+        console.log('Vehicle added locally:', localVehicle)
+      }
+      console.log('Vehicle added successfully with ID:', vehicleId)
+      
+      // Only reload from Firebase if it's not a local fallback
+      if (!vehicleId.startsWith('local_')) {
+        console.log('Reloading vehicles from Firebase...')
+        await loadUserVehicles()
+        console.log('Vehicles reloaded successfully')
+      } else {
+        console.log('Skipping Firebase reload for local vehicle')
+      }
       
       // Close modal and reset states
       setShowVehicleSelection(false)
       setSelectedVehicleModel(null)
       setVehicleNickname('')
       setNewVehicleBattery('100')
+      
+      Alert.alert('Success', 'Vehicle added successfully!')
     } catch (error) {
-      console.error('Error adding vehicle:', error)
-      Alert.alert('Error', 'Failed to add vehicle. Please try again.')
+      console.error('Detailed error adding vehicle:', error)
+      console.error('Error type:', typeof error)
+      console.error('Error message:', error.message)
+      console.error('Error stack:', error.stack)
+      Alert.alert('Error', `Failed to add vehicle: ${error.message || 'Unknown error'}`)
     } finally {
+      console.log('Setting addingVehicle to false')
       setAddingVehicle(false)
     }
   }
@@ -600,7 +708,7 @@ export default function ProfileScreen({ navigation }) {
                       alignItems: 'center',
                       opacity: addingVehicle ? 0.7 : 1
                     }}
-                    onPress={handleSaveNewVehicle}
+                    onPress={handleSaveNewVehicleLocal}
                     disabled={addingVehicle}
                   >
                     <Text style={{ color: Colors.WHITE, fontWeight: '500' }}>

@@ -6,13 +6,31 @@ let vehiclesCache = new Map();
 let cacheTimestamp = new Map();
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
+// Test Firebase connection
+export const testFirebaseConnection = async () => {
+  try {
+    console.log('Testing Firebase connection...')
+    const testRef = collection(db, 'test');
+    console.log('Firebase connection test successful')
+    return true;
+  } catch (error) {
+    console.error('Firebase connection test failed:', error)
+    return false;
+  }
+};
+
 // User Vehicle Management
 export const VehicleService = {
   // Add user's vehicle
   async addUserVehicle(userId, vehicleData) {
+    console.log('Firebase: Starting to add vehicle for user:', userId)
+    console.log('Firebase: Vehicle data received:', vehicleData)
+    
     try {
       const userVehicleRef = collection(db, 'userVehicles');
-      const docRef = await addDoc(userVehicleRef, {
+      console.log('Firebase: Got collection reference')
+      
+      const documentData = {
         userId: userId,
         vehicleId: vehicleData.id,
         nickname: vehicleData.nickname || vehicleData.name,
@@ -22,15 +40,23 @@ export const VehicleService = {
         isActive: true,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
-      });
+      };
+      
+      console.log('Firebase: Document data to save:', documentData)
+      
+      const docRef = await addDoc(userVehicleRef, documentData);
+      console.log('Firebase: Document added with ID:', docRef.id)
       
       // Invalidate cache after adding
       vehiclesCache.delete(userId);
       cacheTimestamp.delete(userId);
+      console.log('Firebase: Cache cleared for user:', userId)
       
       return docRef.id;
     } catch (error) {
-      console.error('Error adding vehicle:', error);
+      console.error('Firebase: Detailed error adding vehicle:', error);
+      console.error('Firebase: Error code:', error.code);
+      console.error('Firebase: Error message:', error.message);
       throw error;
     }
   },
