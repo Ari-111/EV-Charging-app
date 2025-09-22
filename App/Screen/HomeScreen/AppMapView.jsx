@@ -6,9 +6,7 @@ import Markers from "./Markers";
 export default function AppMapView({ placeList }) {
   const { location, setLocation } = useContext(UserLocationContext);
 
-  console.log('🗺️ AppMapView - Rendering static map background');
-  console.log('📍 Location:', location?.latitude, location?.longitude);
-  console.log('📌 PlaceList length:', placeList?.length || 0);
+  // Static map rendering - console logs removed for cleaner output
 
   return (
     <View style={styles.container}>

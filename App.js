@@ -10,6 +10,41 @@ import TabNavigation from './App/Navigations/TabNavigation';
 import * as Location from 'expo-location';
 import { UserLocationContext } from './App/Context/UserLocationContext';
 import './polyfills/crypto';
+import './App/Utils/DevConsole'; // Initialize console filtering
+
+// Suppress console warnings and undefined logs in development
+if (__DEV__) {
+  const originalConsoleWarn = console.warn;
+  const originalConsoleLog = console.log;
+  
+  console.warn = (...args) => {
+    const message = args.join(' ');
+    
+    // Filter out Firebase and other unwanted warnings
+    if (
+      message.includes('@firebase/firestore') ||
+      message.includes('WebChannelConnection') ||
+      message.includes('RPC') ||
+      message.includes('transport errored') ||
+      message.includes('stream') ||
+      message.includes('Firestore (10.14.1)') ||
+      message.includes('WebChannel')
+    ) {
+      return; // Don't log these warnings
+    }
+    
+    originalConsoleWarn.apply(console, args);
+  };
+  
+  console.log = (...args) => {
+    // Filter out undefined logs
+    if (args.length === 1 && args[0] === undefined) {
+      return; // Don't log undefined values
+    }
+    
+    originalConsoleLog.apply(console, args);
+  };
+}
 
 
 

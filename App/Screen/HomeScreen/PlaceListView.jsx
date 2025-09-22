@@ -46,7 +46,10 @@ export default function PlaceListView({ placeList }) {
     const result = favList.find(
       (item) => item.place.place_id == place.place_id
     );
-    console.log(result);
+    // Only log if result exists (removed undefined logs)
+    if (result) {
+      console.log('Favorite found:', result.place?.name);
+    }
     return result ? true : false;
   };
 

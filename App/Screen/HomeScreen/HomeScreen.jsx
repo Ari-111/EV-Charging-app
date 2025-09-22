@@ -14,8 +14,7 @@ export default function HomeScreen() {
   const [placeList, setPlaceList] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState([]);
 
-  console.log('HomeScreen - Location context value:', location);
-  console.log('HomeScreen - Location type:', typeof location);
+  // Debug logs removed for cleaner console
 
   useEffect(() => {
     location && GetNearByPlace();
@@ -24,8 +23,8 @@ export default function HomeScreen() {
   const GetNearByPlace = () => {
     GlobalApi.newNearbyPlace(location)
       .then((response) => {
-        console.log(JSON.stringify(response.data.results));
         setPlaceList(response.data?.results);
+        console.log(`Found ${response.data?.results?.length || 0} EV charging stations nearby`);
       })
       .catch((error) => {
         console.error("Error fetching nearby places:", error);
