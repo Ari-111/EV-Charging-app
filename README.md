@@ -1,11 +1,40 @@
 # ⚡ EV Charging Station Locator App
 
 <p align="center">
-  <img src="assets/images/image1.jpg" alt="App Preview" width="55%" />
+  <img src="assets/images/image1.jpg" alt="App Preview 1" width="30%" />
+  <img src="assets/images/image2.jpg" alt="App Preview 2" width="30%" />
+  <img src="assets/images/image3.jpg" alt="App Preview 3" width="30%" />
 </p>
 
-Welcome to the **EV Charging Station Locator App** 🚗🔋  
-Find nearby EV charging stations, search specific ones, and get real-time navigation seamlessly.
+🚗🔋 **EV Charging Station Locator App** helps users easily discover nearby EV charging stations, check availability, and navigate seamlessly.  
+Built for a **sustainable future**, this app enables EV owners to find charging points in real time and plan their journeys efficiently.  
+
+---
+
+## 🌍 Problem Statement
+
+With the rise of **electric vehicles**, the lack of real-time information about charging stations (availability, connectors, speed, and cost) creates **range anxiety** for EV owners.  
+
+---
+
+## 💡 Our Solution
+
+The **EV Charging Station Locator App** solves this problem by:  
+- Providing **live nearby station discovery**  
+- Showing **availability, wait time, and charging cost**  
+- Offering **navigation support via Google Maps**  
+- Allowing users to **search and filter** charging stations  
+
+---
+
+## 🚀 Features
+
+- 🔍 **Station Locator:** Find EV charging stations using **Google Place API**  
+- 👤 **Authentication:** Secure sign-in/sign-up powered by **Clerk**  
+- 🗺️ **Search Functionality:** Search with Google Place Autocomplete  
+- 📍 **Location Marker:** Track your current location in real-time  
+- ⚡ **Station Details:** Availability, wait time, pricing, amenities & connectors  
+- 🧭 **Navigation:** Direct route guidance with Google Maps  
 
 ---
 
@@ -21,22 +50,12 @@ Find nearby EV charging stations, search specific ones, and get real-time naviga
 
 ---
 
-## 🚀 Features
+## 📱 App Flow
 
-- 🔍 **Station Locator:** Find nearby EV charging stations using the **Google Place API**.  
-- 👤 **User Authentication:** Secure **sign-in/sign-up** powered by **Clerk**.  
-- 🗺️ **Search Functionality:** Quickly locate stations with **Google Place Autocomplete**.  
-- 📍 **Location Marker:** View your current location on an interactive map.  
-- 🧭 **Navigate to Station:** Get directions instantly via **Google Maps**.  
-
----
-
-## 📱 How It Works
-
-1. **Login / Sign Up** → Authenticate securely with Clerk.  
-2. **Locate Stations** → Nearby EV charging stations automatically appear.  
-3. **Search** → Use the search bar to find a specific station.  
-4. **Navigate** → Tap a station to open Google Maps for directions.  
+1. **Login / Sign Up** → Authenticate with Clerk  
+2. **Locate Stations** → Auto-detect nearby charging stations  
+3. **Check Details** → Availability, cost, speed, connectors & wait time  
+4. **Navigate** → Open Google Maps for directions  
 
 ---
 
