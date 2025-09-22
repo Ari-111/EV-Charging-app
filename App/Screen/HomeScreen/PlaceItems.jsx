@@ -129,24 +129,87 @@ export default function PlaceItems({ place, isFav, markedFav }) {
             {place.vicinity}
           </Text>
 
-          <Text
-            style={{
-              fontWeight: "600",
-              fontSize: 17,
-            }}
-          >
-            Rating
-          </Text>
+          {/* Rating and Availability Section */}
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: 5 }}>
+            <View>
+              <Text style={{ fontWeight: "600", fontSize: 15 }}>Rating</Text>
+              <Text style={{ color: Colors.GRAY, fontSize: 18 }}>{place.rating}</Text>
+            </View>
+            <View>
+              <Text style={{ fontWeight: "600", fontSize: 15 }}>Availability</Text>
+              <Text style={{ 
+                color: place.availability === "Available" ? Colors.PRIMARY : 
+                       place.availability === "Busy" ? "#FFA500" : "#FF6B6B", 
+                fontSize: 14, 
+                fontWeight: "500" 
+              }}>
+                {place.availability || "Unknown"}
+              </Text>
+            </View>
+          </View>
 
-          <Text
-            style={{
-              color: Colors.GRAY,
-              fontSize: 20,
-              marginTop: 2,
-            }}
-          >
-            {place.rating}
-          </Text>
+          {/* Pricing and Wait Time Section */}
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: 5 }}>
+            <View>
+              <Text style={{ fontWeight: "600", fontSize: 15 }}>Price</Text>
+              <Text style={{ color: Colors.PRIMARY, fontSize: 16, fontWeight: "600" }}>
+                {place.price || "₹—"}
+              </Text>
+            </View>
+            <View>
+              <Text style={{ fontWeight: "600", fontSize: 15 }}>Wait Time</Text>
+              <Text style={{ color: Colors.GRAY, fontSize: 14 }}>
+                {place.waitTime || "0 min"}
+              </Text>
+            </View>
+          </View>
+
+          {/* Charging Speed and Connectors Section */}
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: 5 }}>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontWeight: "600", fontSize: 15 }}>Charging Speed</Text>
+              <Text style={{ 
+                color: place.chargingSpeed === "Rapid" ? "#4CAF50" : 
+                       place.chargingSpeed === "Fast" ? "#FF9800" : "#757575", 
+                fontSize: 14, 
+                fontWeight: "500" 
+              }}>
+                {place.chargingSpeed || "Unknown"}
+              </Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontWeight: "600", fontSize: 15 }}>Connectors</Text>
+              <Text style={{ color: Colors.GRAY, fontSize: 12, flexWrap: 'wrap' }}>
+                {place.connectorTypes ? place.connectorTypes.join(", ") : "Unknown"}
+              </Text>
+            </View>
+          </View>
+
+          {/* Amenities Section */}
+          {place.amenities && place.amenities.length > 0 && (
+            <View style={{ marginVertical: 5 }}>
+              <Text style={{ fontWeight: "600", fontSize: 15, marginBottom: 3 }}>Amenities</Text>
+              <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+                {place.amenities.map((amenity, index) => (
+                  <View
+                    key={index}
+                    style={{
+                      backgroundColor: Colors.PRIMARY,
+                      paddingHorizontal: 8,
+                      paddingVertical: 2,
+                      borderRadius: 12,
+                      margin: 2,
+                    }}
+                  >
+                    <Text style={{ color: "white", fontSize: 10, fontWeight: "500" }}>
+                      {amenity}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          )}
+
           <Pressable
             onPress={() => onDirectionClick()}
             style={{
@@ -155,6 +218,7 @@ export default function PlaceItems({ place, isFav, markedFav }) {
               borderRadius: 6,
               paddingHorizontal: 10,
               marginLeft: "auto",
+              marginTop: 5,
             }}
           >
             <FontAwesome5 name="location-arrow" size={25} color="white" />
