@@ -2,8 +2,7 @@ import { View, Text, FlatList, Dimensions } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import PlaceItems from "./PlaceItems";
 import { SelectedMarkerContext } from "../../Context/SelectedMarkerContext";
-import { getFirestore } from "firebase/firestore";
-import { app } from "../../Utils/FirebaseConfig";
+import { app, db } from "../../Utils/FirebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { useUser } from "@clerk/clerk-expo";
 
@@ -26,7 +25,6 @@ export default function PlaceListView({ placeList }) {
   });
 
   // Get data from firestore
-  const db = getFirestore(app);
   useEffect(() => {
     user && getFav();
   }, [user]);

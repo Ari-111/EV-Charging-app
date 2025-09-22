@@ -16,13 +16,69 @@ export default function LoginScreen() {
 
   const onPress = async() =>{
     try {
+      console.log("Starting OAuth flow...");
       const { createdSessionId, signIn, signUp, setActive } =
         await startOAuthFlow();
 
+      console.log("OAuth response:", { createdSessionId, signIn, signUp });
+
       if (createdSessionId) {
-        setActive({ session: createdSessionId });
+        console.log("Setting active session:", createdSessionId);
+        await setActive({ session: createdSessionId });
+        console.log("Session activated successfully");
       } else {
-        // Use signIn or signUp for next steps such as MFA
+        console.log("No session created, checking signIn/signUp");
+        
+        // Handle signUp completion if missing requirements
+        if (signUp && signUp.status === "missing_requirements") {
+          console.log("SignUp missing requirements, attempting to complete...");
+          try {
+            // Try to complete signup by making phone number optional
+            const completeSignUp = await signUp.update({
+              // Don't require phone number for OAuth users
+            });
+            
+            if (completeSignUp.createdSessionId) {
+              console.log("SignUp completed, setting session:", completeSignUp.createdSessionId);
+              await setActive({ session: completeSignUp.createdSessionId });
+            } else {
+              // If phone is still required, we'll skip it and try to create session anyway
+              console.log("Attempting to create session without phone number...");
+              try {
+                await signUp.create();
+                if (signUp.createdSessionId) {
+                  await setActive({ session: signUp.createdSessionId });
+                }
+              } catch (createError) {
+                console.log("Create signup error:", createError);
+                // If signup still fails, try signing in instead
+                if (signIn) {
+                  console.log("Trying signIn instead...");
+                  await signIn.attemptFirstFactor({
+                    strategy: "oauth_google"
+                  });
+                }
+              }
+            }
+          } catch (updateError) {
+            console.log("SignUp update error:", updateError);
+          }
+        }
+        
+        // Handle signIn
+        if (signIn && signIn.status === "needs_identifier") {
+          console.log("SignIn needs identifier, attempting first factor...");
+          try {
+            const result = await signIn.attemptFirstFactor({
+              strategy: "oauth_google"
+            });
+            if (result.createdSessionId) {
+              await setActive({ session: result.createdSessionId });
+            }
+          } catch (signInError) {
+            console.log("SignIn error:", signInError);
+          }
+        }
       }
     } catch (err) {
       console.error("OAuth error", err);
@@ -53,7 +109,7 @@ export default function LoginScreen() {
         style={styles.button}>
           <Text style={{
             textAlign: 'center',
-            fontFamily: 'outfit',
+            fontFamily: 'System',
             color: Colors.WHITE,
             fontSize: 15,
           
@@ -80,14 +136,13 @@ const styles = StyleSheet.create({
 
     heading: {
       fontSize: 25,
-      fontFamily: 'outfit-bold',
+      fontWeight: 'bold',
       textAlign: 'center',
       marginTop: 30,
     },
 
     desc: {
       fontSize: 15,
-      fontFamily: 'outfit',
       textAlign: 'center',
       marginTop: 10,
       color: Colors.GRAY

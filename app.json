@@ -33,9 +33,7 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow EV Station App to use your location."
         }
-      ],
-
-      "expo-font"
+      ]
     ]
     
   }

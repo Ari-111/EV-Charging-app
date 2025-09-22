@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
 
-const API_KEY = "AIzaSyD2Q6ZU376FfXEz9BREFaNOWAlvJ2ncqIY";
+const API_KEY = "AIzaSyD4hG4XEqrcNMQvc4YXoLyPRf5c-mo-m8k";
 
 const config = {
     params: {

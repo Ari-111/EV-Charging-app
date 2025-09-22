@@ -1,14 +1,12 @@
 import { View, Text, ActivityIndicator, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import Colors from "../../Utils/Colors";
-import { getFirestore } from "firebase/firestore";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { useUser } from "@clerk/clerk-expo";
-import { app } from "../../Utils/FirebaseConfig";
+import { app, db } from "../../Utils/FirebaseConfig";
 import PlaceItems from "../HomeScreen/PlaceItems";
 
 export default function FavouriteScreen() {
-  const db = getFirestore(app);
   const { user } = useUser();
   const [favList, setFavList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,7 +33,7 @@ export default function FavouriteScreen() {
       <Text
         style={{
           textAlign: "center",
-          fontFamily: "outfit-medium",
+          fontWeight: "600",
           marginTop: 5,
           fontSize: 30,
           padding: 5,
@@ -53,7 +51,7 @@ export default function FavouriteScreen() {
           }}
         >
           <ActivityIndicator size={"large"} />
-          <Text style={{ fontFamily: "outfit", margin: 5 }}>Loading...</Text>
+          <Text style={{ margin: 5 }}>Loading...</Text>
         </View>
       ) : null}
 

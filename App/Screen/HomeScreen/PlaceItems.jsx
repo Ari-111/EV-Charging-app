@@ -14,9 +14,8 @@ import GlobalApi from "../../Utils/GlobalApi";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { deleteDoc, getFirestore } from "firebase/firestore";
-import { app } from "../../Utils/FirebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, setDoc } from "firebase/firestore";
+import { app, db } from "../../Utils/FirebaseConfig";
 import { useUser } from "@clerk/clerk-expo";
 
 export default function PlaceItems({ place, isFav, markedFav }) {
@@ -33,7 +32,6 @@ export default function PlaceItems({ place, isFav, markedFav }) {
   }, [place]);
 
   const { user } = useUser();
-  const db = getFirestore(app);
   const onSetFav = async (app) => {
     await setDoc(doc(db, "ev-fav-place", place.place_id.toString()), {
       place: place,
@@ -41,21 +39,12 @@ export default function PlaceItems({ place, isFav, markedFav }) {
     });
     markedFav();
 
-    if (Platform.OS === 'web') {
-      Alert.alert("Success", "Added to Favorites!");
-    } else {
-      // For mobile platforms, we'll use Alert as a fallback since ToastAndroid doesn't work with react-native-web
-      Alert.alert("Success", "Added to Favorites!");
-    }
+    Alert.alert("Success", "Fav Added!");
   };
 
   const onRemoveFav = async (placeId) => {
     await deleteDoc(doc(db, "ev-fav-place", placeId));
-    if (Platform.OS === 'web') {
-      Alert.alert("Success", "Removed from Favorites!");
-    } else {
-      Alert.alert("Success", "Removed from Favorites!");
-    }
+    Alert.alert("Success", "Removed from Fav!");
     //markedFav()
   };
 
@@ -127,7 +116,7 @@ export default function PlaceItems({ place, isFav, markedFav }) {
           <Text
             style={{
               fontSize: 18,
-              fontFamily: "outfit-medium",
+              fontWeight: "600",
             }}
           >
             {place.name}
@@ -135,7 +124,6 @@ export default function PlaceItems({ place, isFav, markedFav }) {
           <Text
             style={{
               color: Colors.GRAY,
-              fontFamily: "outfit",
             }}
           >
             {place.vicinity}
@@ -143,8 +131,7 @@ export default function PlaceItems({ place, isFav, markedFav }) {
 
           <Text
             style={{
-              fontFamily: "outfit-medium",
-
+              fontWeight: "600",
               fontSize: 17,
             }}
           >
@@ -153,7 +140,6 @@ export default function PlaceItems({ place, isFav, markedFav }) {
 
           <Text
             style={{
-              fontFamily: "outfit",
               color: Colors.GRAY,
               fontSize: 20,
               marginTop: 2,

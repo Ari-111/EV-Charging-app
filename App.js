@@ -1,15 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useCallback, useEffect, useState } from 'react';
 import LoginScreen from './App/Screen/LoginScreen/LoginScreen';
-import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
+import { ClerkProvider, SignedIn, SignedOut, useUser } from '@clerk/clerk-expo';
 import * as SecureStore from "expo-secure-store";
 import { NavigationContainer, TabRouter } from '@react-navigation/native';
 import TabNavigation from './App/Navigations/TabNavigation';
 import * as Location from 'expo-location';
 import { UserLocationContext } from './App/Context/UserLocationContext';
+import './polyfills/crypto';
 
 
 
@@ -32,20 +32,15 @@ const tokenCache = {
   },
 };
 
+
+
 export default function App() {
-
-  const [fontsLoaded, fontError] = useFonts({
-    'outfit': require('./assets/fonts/Outfit-Regular.ttf'),
-    'outfit-medium': require('./assets/fonts/Outfit-SemiBold.ttf'),
-    'outfit-bold': require('./assets/fonts/Outfit-Bold.ttf'),
-  });
-
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
     (async () => {
-      
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
@@ -54,51 +49,40 @@ export default function App() {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location.coords);
-      
+      setAppIsReady(true);
     })();
   }, []);
 
-  let text = 'Waiting..';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
-
   const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded || fontError) {
+    if (appIsReady) {
       await SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, fontError]);
+  }, [appIsReady]);
 
-  if (!fontsLoaded && !fontError) {
+  if (!appIsReady) {
     return null;
   }
   return (
     <ClerkProvider
      tokenCache={tokenCache}
-     publishableKey={'pk_test_YWNjdXJhdGUta2l3aS03Ny5jbGVyay5hY2NvdW50cy5kZXYk'}
-    
+     publishableKey={'pk_test_ZmFtb3VzLWNvbHQtNDcuY2xlcmsuYWNjb3VudHMuZGV2JA'}
     >
-      <UserLocationContext.Provider
-       value={{location,setLocation}}
-      >
-       <View style={styles.container} onLayout={onLayoutRootView}>
-         <SignedIn>
+      <UserLocationContext.Provider value={{location,setLocation}}>
+        <View style={styles.container} onLayout={onLayoutRootView}>
+          <SignedIn>
             <NavigationContainer>
               <TabNavigation />
             </NavigationContainer>
-         </SignedIn>
+          </SignedIn>
 
-         <SignedOut>
-           <LoginScreen/>
-         </SignedOut>
-       
-         <StatusBar style="auto" />
-       </View>
+          <SignedOut>
+            <LoginScreen/>
+          </SignedOut>
+          
+          <StatusBar style="auto" />
+        </View>
       </UserLocationContext.Provider>
     </ClerkProvider>
-    
   );
 }
 
