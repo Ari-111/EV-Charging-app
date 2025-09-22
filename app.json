@@ -1,9 +1,10 @@
 {
   "expo": {
-    "name": "EV-charging-station-app",
-    "slug": "EV-charging-station-app",
+    "name": "EV Charging Station",
+    "slug": "ev-charging-station-app",
     "scheme": "ev-charging-station-app",
     "version": "1.0.0",
+    "owner": "airxashish",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -26,6 +27,17 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "package": "com.evchargingstation.app",
+      "versionCode": 1,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "INTERNET",
+        "ACCESS_NETWORK_STATE",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
+      ],
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDVIpT3YT1Pios4hhuxhrTyG1N2F007e6c"
@@ -42,7 +54,11 @@
           "locationAlwaysAndWhenInUsePermission": "Allow EV Station App to use your location."
         }
       ]
-    ]
-    
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "ab5d93be-e5d4-4af3-b5e8-0607cc6b063c"
+      }
+    }
   }
 }
